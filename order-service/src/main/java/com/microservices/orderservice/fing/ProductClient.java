@@ -1,5 +1,6 @@
 package com.microservices.orderservice.fing;
 
+import com.microservices.orderservice.dto.ProductResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,5 +10,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface ProductClient {
 
     @GetMapping("/products/{id}")
-    Object getProductById(@PathVariable Long id);
+    ProductResponse getProductById(@PathVariable Long id);
 }

@@ -10,4 +10,6 @@ public class OrderResponse {
     private Long userId;
     private Long productId;
     private int quantity;
+    private String status;
+    private Double amount;
 }

@@ -1,0 +1,13 @@
+resilience4j:
+  circuitbreaker:
+    instances:
+      paymentService:
+        slidingWindowSize: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+
+  retry:
+    instances:
+      paymentService:
+        maxAttempts: 3
+        waitDuration: 2s

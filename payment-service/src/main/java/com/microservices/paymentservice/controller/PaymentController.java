@@ -1,23 +1,26 @@
 package com.microservices.paymentservice.controller;
 
+import com.microservices.paymentservice.dto.PaymentRequest;
+import com.microservices.paymentservice.dto.PaymentResponse;
 import com.microservices.paymentservice.entity.Payment;
+import com.microservices.paymentservice.repsotory.PaymentRepository;
 import com.microservices.paymentservice.service.PaymentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/payments")
 @RequiredArgsConstructor
 public class PaymentController {
 
-    private final PaymentService service;
+    private final PaymentService paymentService;
 
     @PostMapping
-    public Payment makePayment(@RequestParam Long orderId,
-                               @RequestParam Double amount) {
-        return service.processPayment(orderId, amount);
+    public PaymentResponse makePayment(@RequestBody PaymentRequest request) {
+
+        return paymentService.processPayment(
+                request.getOrderId(),
+                request.getAmount()
+        );
     }
 }

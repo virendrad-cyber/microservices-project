@@ -68,8 +68,14 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.32</version> <!-- ✅ FIX -->
+            <version>1.18.32</version> <!-- FIX -->
             <optional>true</optional>
+        </dependency>
+
+        <!-- circut breaker -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId>
         </dependency>
 
         <!-- Test -->
