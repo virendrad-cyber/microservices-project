@@ -61,11 +61,11 @@ public class OrderServiceImpl implements OrderService {
         order = repo.save(order);
 
         try {
-            // 5. Update status → PAYMENT_PENDING
+            // Step 1: PAYMENT_PENDING
             order.setStatus(OrderStatus.PAYMENT_PENDING);
             repo.save(order);
 
-            // 6. Call Payment Service
+            // Step 2: Call Payment
             PaymentRequest paymentRequest = PaymentRequest.builder()
                     .orderId(order.getId())
                     .amount(totalAmount)
@@ -73,17 +73,43 @@ public class OrderServiceImpl implements OrderService {
 
             PaymentResponse response = paymentServiceCaller.callPaymentService(paymentRequest);
 
-            // 7. Handle response
+            // Step 3: SUCCESS
             if ("SUCCESS".equalsIgnoreCase(response.getStatus())) {
                 order.setStatus(OrderStatus.PAYMENT_COMPLETED);
             } else {
-                order.setStatus(OrderStatus.PAYMENT_FAILED);
+                // Step 4: COMPENSATION
+                cancelOrder(order);
             }
 
         } catch (Exception ex) {
-            // 8. Failure case
-            order.setStatus(OrderStatus.PAYMENT_FAILED);
+            // Step 5: SYSTEM FAILURE → COMPENSATION
+            cancelOrder(order);
         }
+
+//        try {
+//            // 5. Update status → PAYMENT_PENDING
+//            order.setStatus(OrderStatus.PAYMENT_PENDING);
+//            repo.save(order);
+//
+//            // 6. Call Payment Service
+//            PaymentRequest paymentRequest = PaymentRequest.builder()
+//                    .orderId(order.getId())
+//                    .amount(totalAmount)
+//                    .build();
+//
+//            PaymentResponse response = paymentServiceCaller.callPaymentService(paymentRequest);
+//
+//            // 7. Handle response
+//            if ("SUCCESS".equalsIgnoreCase(response.getStatus())) {
+//                order.setStatus(OrderStatus.PAYMENT_COMPLETED);
+//            } else {
+//                order.setStatus(OrderStatus.PAYMENT_FAILED);
+//            }
+//
+//        } catch (Exception ex) {
+//            // 8. Failure case
+//            order.setStatus(OrderStatus.PAYMENT_FAILED);
+//        }
 
         // 9. Save final state
         order = repo.save(order);
@@ -100,5 +126,12 @@ public class OrderServiceImpl implements OrderService {
                 .status(o.getStatus().name())
                 .amount(o.getAmount())
                 .build();
+    }
+
+    private void cancelOrder(Order order) {
+        System.out.println(">>> SAGA COMPENSATION: Cancelling Order " + order.getId());
+
+        order.setStatus(OrderStatus.CANCELLED);
+        repo.save(order);
     }
 }
