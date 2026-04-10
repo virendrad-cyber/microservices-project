@@ -6,9 +6,10 @@ services:
     image: postgres:16
     container_name: postgres-db
     environment:
-      POSTGRES_DB: user_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "5432:5432"
 
@@ -25,6 +26,7 @@ services:
       - "8080:8080"
     depends_on:
       - discovery-server
+    restart: always
 
   user-service:
     build: ./user-service
@@ -34,6 +36,7 @@ services:
     depends_on:
       - postgres
       - discovery-server
+    restart: always
 
   product-service:
     build: ./product-service
@@ -43,6 +46,7 @@ services:
     depends_on:
       - postgres
       - discovery-server
+    restart: always
 
   order-service:
     build: ./order-service
@@ -52,6 +56,7 @@ services:
     depends_on:
       - postgres
       - discovery-server
+    restart: always
 
   payment-service:
     build: ./payment-service
@@ -61,3 +66,4 @@ services:
     depends_on:
       - postgres
       - discovery-server
+    restart: always
