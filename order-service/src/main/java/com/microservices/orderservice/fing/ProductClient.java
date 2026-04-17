@@ -11,4 +11,8 @@ public interface ProductClient {
 
     @GetMapping("/products/{id}")
     ProductResponse getProductById(@PathVariable Long id);
+
+    @PutMapping("/products/{id}/reduce")
+    void reduceStock(@PathVariable("id") Long id,
+                     @RequestParam("quantity") int quantity);
 }

@@ -8,10 +8,13 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+
 
   discovery-server:
     build: ./discovery-serverr   # folder name can stay same
@@ -67,3 +70,6 @@ services:
       - postgres
       - discovery-server
     restart: always
+
+volumes:
+  postgres_data:

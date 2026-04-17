@@ -42,4 +42,13 @@ public class ProductController {
     public void delete(@PathVariable Long id) {
         service.delete(id);
     }
+
+//    @PutMapping("/{id}/reduce")
+//    public ResponseEntity<String> reduceStock(
+//            @PathVariable Long id,
+//            @RequestParam int quantity) {
+//
+//        service.reduceStock(id, quantity);
+//        return ResponseEntity.ok("Stock reduced successfully");
+//    }
 }

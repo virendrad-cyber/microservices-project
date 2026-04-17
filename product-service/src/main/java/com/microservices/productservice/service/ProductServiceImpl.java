@@ -65,6 +65,21 @@ public class ProductServiceImpl implements ProductService {
         repo.deleteById(id);
     }
 
+//    @Override
+//    public void reduceStock(Long productId, int quantity) {
+//
+//        Product product = repo.findById(productId)
+//                .orElseThrow(() -> new RuntimeException("Product not found"));
+//
+//        if (product.getQuantity() < quantity) {
+//            throw new RuntimeException("Insufficient stock");
+//        }
+//
+//        product.setQuantity(product.getQuantity() - quantity);
+//
+//        repo.save(product);
+//    }
+
     private ProductResponse map(Product p) {
         return ProductResponse.builder()
                 .id(p.getId())
